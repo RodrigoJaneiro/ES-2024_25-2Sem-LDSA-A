@@ -14,7 +14,7 @@ public class App {
         String nomeArea = scanner.nextLine();
 
         try {
-            List<Propriedade> propriedades = CSVLoader.LoadPropriedades(nivel, nomeArea);
+            List<Propriedade> propriedades = CSVLoader.LoadPropriedades(nomeArea);
 
             if (propriedades.isEmpty()) {
                 System.out.println("Nenhuma propriedade encontrada para a área especificada.");
