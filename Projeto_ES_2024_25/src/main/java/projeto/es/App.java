@@ -1,10 +1,11 @@
 package projeto.es;
-
+import javafx.application.Application;
 import java.util.List;
 import java.util.Scanner;
 
 public class App {
     public static void main(String[] args) {
+      Application.launch(ApplicationViewer.class, args);
         Scanner scanner = new Scanner(System.in);
 
         System.out.println("Escolha o nível administrativo (freguesia, concelho, distrito): ");
