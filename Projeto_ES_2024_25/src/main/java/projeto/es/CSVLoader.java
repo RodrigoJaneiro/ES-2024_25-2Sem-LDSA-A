@@ -13,7 +13,7 @@ import java.util.Objects;
 
 public class CSVLoader {
     public static List<Propriedade> LoadPropriedades(String nomeFicheiroCsv) throws IOException, ParseException {
-        final int MAX_LINHAS = 14000;
+        final int MAX_LINHAS = 14083;
         int i = 0;
 
         String caminhoCsv = Objects.requireNonNull(App.class.getClassLoader().getResource(nomeFicheiroCsv + ".csv"))
