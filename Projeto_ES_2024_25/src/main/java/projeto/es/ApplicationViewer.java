@@ -8,8 +8,9 @@ import javafx.stage.Stage;
 public class ApplicationViewer extends Application {
     @Override
     public void start(Stage stage) throws Exception {
+        GraphViewer graphViewer = new GraphViewer(CSVLoader.LoadPropriedades("Madeira"));
 
-        StackPane root = new StackPane(GraphViewer.drawGraphVizinhos());
+        StackPane root = new StackPane(graphViewer.drawGraphVizinhos());
         Scene scene = new Scene(root, 600, 400);
 
         stage.setTitle("Grafo Não Direcionado");

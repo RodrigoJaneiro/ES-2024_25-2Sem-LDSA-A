@@ -9,11 +9,25 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.List;
 
 public class GraphViewer {
     private static final String PATH = "src/main/resources/graphs/";
+    private List <Propriedade> propriedades;
 
-    public static ImageView drawGraphVizinhos() throws IOException {
+    public GraphViewer(List <Propriedade> propriedades) {
+        this.propriedades = propriedades;
+    }
+
+    public List <Propriedade> getPropriedades() {
+        return propriedades;
+    }
+
+    public void setPropriedades(List <Propriedade> propriedades) {
+        this.propriedades = propriedades;
+    }
+
+    public ImageView drawGraphVizinhos() throws IOException {
         // Define o grafo DOT
         String dotGraph = "graph G { 1 -- 2; 2 -- 3; 3 -- 1; }";
 
