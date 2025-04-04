@@ -8,7 +8,6 @@ import org.locationtech.jts.io.WKTReader;
 public class Propriedade {
     private int objectId;
     private float par_id;
-    private int par_num;
     private double shape_length;
     private double shape_area;
     private Geometry geometry;
@@ -22,7 +21,6 @@ public class Propriedade {
 
         this.objectId = Integer.parseInt(record.get("OBJECTID"));
         this.par_id = Float.parseFloat(record.get("PAR_ID"));
-        //this.par_num = Integer.parseInt(record.get("PAR_NUM"));
         this.shape_length = Double.parseDouble(record.get("Shape_Length"));
         this.shape_area = Double.parseDouble(record.get("Shape_Area"));
         this.geometry = wktReader.read(record.get("geometry"));
@@ -38,10 +36,6 @@ public class Propriedade {
 
     public float getPar_id() {
         return par_id;
-    }
-
-    public int getPar_num() {
-        return par_num;
     }
 
     public double getShape_length() {
@@ -80,10 +74,6 @@ public class Propriedade {
         this.par_id = par_id;
     }
 
-    public void setPar_num(int par_num) {
-        this.par_num = par_num;
-    }
-
     public void setShape_length(double shape_length) {
         this.shape_length = shape_length;
     }
@@ -118,7 +108,6 @@ public class Propriedade {
             "Propriedade{" +
             "objectId=" + objectId +
             ", par_id=" + par_id +
-            ", par_num=" + par_num +
             ", shape_length=" + shape_length +
             ", shape_area=" + shape_area +
             ", geometry='" + geometry + '\'' +
