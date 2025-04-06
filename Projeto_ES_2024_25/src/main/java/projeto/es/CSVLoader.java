@@ -16,18 +16,23 @@ public class CSVLoader {
         final int MAX_LINHAS = 14083;
         int i = 0;
 
-        String caminhoCsv = Objects.requireNonNull(App.class.getClassLoader().getResource(nomeFicheiroCsv + ".csv"))
-                .getPath();
+        String caminhoCsv;
+        try {
+            caminhoCsv = Objects.requireNonNull(App.class.getClassLoader().getResource(nomeFicheiroCsv + ".csv"))
+                    .getPath();
+        } catch (NullPointerException e) {
+            throw new IOException("Arquivo não encontrado: " + nomeFicheiroCsv, e);
+        }
+
         List<Propriedade> properties = new ArrayList<>();
 
         try (FileReader reader = new FileReader(caminhoCsv);
-
-                CSVParser csvParser = CSVFormat.DEFAULT.builder()
-                        .setDelimiter(';')
-                        .setHeader()
-                        .setSkipHeaderRecord(true)
-                        .build()
-                        .parse(reader)) {
+             CSVParser csvParser = CSVFormat.DEFAULT.builder()
+                     .setDelimiter(';')
+                     .setHeader()
+                     .setSkipHeaderRecord(true)
+                     .build()
+                     .parse(reader)) {
             for (CSVRecord record : csvParser) {
                 if (i == MAX_LINHAS) {
                     break;
