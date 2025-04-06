@@ -29,6 +29,8 @@ public class Propriedade {
         this.municipio = record.get("Municipio");
         this.ilha = record.get("Ilha");
     }
+    public Propriedade() {
+    }
 
     public int getObjectId() {
         return objectId;
