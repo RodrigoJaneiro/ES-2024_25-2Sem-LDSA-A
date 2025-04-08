@@ -11,22 +11,46 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.List;
 
+/**
+ * The type Graph viewer.
+ */
 public class GraphViewer {
     private static final String PATH = "src/main/resources/graphs/";
     private List <Propriedade> propriedades;
 
+    /**
+     * Instantiates a new Graph viewer.
+     *
+     * @param propriedades the propriedades
+     */
     public GraphViewer(List <Propriedade> propriedades) {
         this.propriedades = propriedades;
     }
 
+    /**
+     * Gets propriedades.
+     *
+     * @return the propriedades
+     */
     public List <Propriedade> getPropriedades() {
         return propriedades;
     }
 
+    /**
+     * Sets propriedades.
+     *
+     * @param propriedades the propriedades
+     */
     public void setPropriedades(List <Propriedade> propriedades) {
         this.propriedades = propriedades;
     }
 
+    /**
+     * Draw graph vizinhos image view.
+     *
+     * @return the image view
+     * @throws IOException the io exception
+     */
     public ImageView drawGraphVizinhos() throws IOException {
         List<List<Integer>> vizinhos = Calculations.encontrarVizinhos(propriedades);
 

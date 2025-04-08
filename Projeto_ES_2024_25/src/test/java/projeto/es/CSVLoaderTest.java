@@ -6,8 +6,16 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * The type Csv loader test.
+ */
 public class CSVLoaderTest {
 
+    /**
+     * Test load propriedades success.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void testLoadPropriedadesSuccess() throws Exception {
         // Teste com arquivo CSV válido
@@ -31,6 +39,9 @@ public class CSVLoaderTest {
         assertEquals(67890.0f, p2.getPar_id());
     }
 
+    /**
+     * Test load propriedades file not found.
+     */
     @Test
     public void testLoadPropriedadesFileNotFound() {
         // Teste com arquivo inexistente
@@ -39,6 +50,11 @@ public class CSVLoaderTest {
         });
     }
 
+    /**
+     * Test load propriedades empty file.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void testLoadPropriedadesEmptyFile() throws Exception {
         // Teste com arquivo sem informação

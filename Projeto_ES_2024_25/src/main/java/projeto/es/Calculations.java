@@ -9,7 +9,16 @@ import java.util.stream.Collectors;
 
 import org.locationtech.jts.geom.Geometry;
 
+/**
+ * The type Calculations.
+ */
 public class Calculations {
+    /**
+     * Encontrar vizinhos list.
+     *
+     * @param propriedades the propriedades
+     * @return the list
+     */
     public static List<List<Integer>> encontrarVizinhos(List<Propriedade> propriedades) {
         Set<Set<Integer>> paresUnicos = new HashSet<>();
 

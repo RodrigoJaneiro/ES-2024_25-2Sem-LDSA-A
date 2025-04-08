@@ -12,6 +12,9 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
+/**
+ * The type Application viewer.
+ */
 public class ApplicationViewer extends Application {
     private Stage primaryStage;
 
@@ -88,6 +91,11 @@ public class ApplicationViewer extends Application {
         primaryStage.show();
     }
 
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
     public static void main(String[] args) {
         launch(args);
     }

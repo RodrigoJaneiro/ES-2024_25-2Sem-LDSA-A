@@ -7,8 +7,16 @@ import org.locationtech.jts.io.WKTReader;
 import static org.junit.Assert.*;
 
 
+/**
+ * The type Propriedade test.
+ */
 public class PropriedadeTest {
 
+    /**
+     * Test propriedade creation and getters.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void testPropriedadeCreationAndGetters() throws Exception {
         // Teste de criação e getters da classe Propriedade
@@ -41,6 +49,11 @@ public class PropriedadeTest {
         assertEquals("IlhaTeste", propriedade.getIlha());
     }
 
+    /**
+     * Test to string.
+     *
+     * @throws Exception the exception
+     */
     @Test
     public void testToString() throws Exception {
         // Teste do toString da classe Propriedade

@@ -11,7 +11,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * The type Csv loader.
+ */
 public class CSVLoader {
+    /**
+     * Load propriedades list.
+     *
+     * @param nomeFicheiroCsv the nome ficheiro csv
+     * @return the list
+     * @throws IOException    the io exception
+     * @throws ParseException the parse exception
+     */
     public static List<Propriedade> LoadPropriedades(String nomeFicheiroCsv) throws IOException, ParseException {
         final int MAX_LINHAS = 14083;
         int i = 0;
