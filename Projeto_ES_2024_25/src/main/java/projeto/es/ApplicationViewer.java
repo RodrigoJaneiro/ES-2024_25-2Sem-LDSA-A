@@ -36,9 +36,12 @@ public class ApplicationViewer extends Application {
             btn.setMinHeight(100);
             final int exerciseNumber = i;
 
+            // Define a ação quando o botão é clicado
             btn.setOnAction(e -> {
+                // Cria um painel para o conteúdo do exercício
                 StackPane contentPane = new StackPane();
-
+                
+                // Cria uma nova janela para o exercício
                 Stage exerciseStage = new Stage();
                 exerciseStage.setTitle("Exercício " + exerciseNumber);
 
@@ -49,6 +52,7 @@ public class ApplicationViewer extends Application {
                 exerciseStage.setScene(scene);
                 exerciseStage.show();
 
+                // Tarefa para carregar o grafo
                 Task<ScrollPane> task = new Task<ScrollPane>() {
                     @Override
                     protected ScrollPane call() throws Exception {
@@ -59,6 +63,7 @@ public class ApplicationViewer extends Application {
                             scrollPane.setContent(graphViewer.drawGraphVizinhos());
                         }
 
+                        // Configura as barras de scroll
                         scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
                         scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
 
@@ -66,6 +71,7 @@ public class ApplicationViewer extends Application {
                     }
                 };
 
+                // Define o que acontece quando a tarefa termina com sucesso
                 task.setOnSucceeded(event -> {
                     contentPane.getChildren().clear();
 
@@ -73,6 +79,7 @@ public class ApplicationViewer extends Application {
                     contentPane.getChildren().add(scrollPane);
                 });
 
+                // Define o que acontece se a tarefa falhar
                 task.setOnFailed(event -> {
                     contentPane.getChildren().clear();
                     contentPane.getChildren().add(new Label("Erro ao carregar: " +
@@ -85,6 +92,7 @@ public class ApplicationViewer extends Application {
             grid.add(btn, (i - 2) % 3, (i - 2) / 3);
         }
 
+        // Cria o menu principal com a grelha de botões
         Scene scene = new Scene(grid, 600, 400);
         primaryStage.setTitle("Menu Principal");
         primaryStage.setScene(scene);
