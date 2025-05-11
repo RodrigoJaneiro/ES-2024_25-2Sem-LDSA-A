@@ -82,9 +82,10 @@ public class ApplicationViewer extends Application {
                             case 5:
                                 scrollPane.setContent(createAreaCalculationUI(graphViewer, exerciseNumber == 5));
                                 break;
-                            case 6: // Novo caso para o exercício 6
-                                return createSwapSuggestionsUI(loadedProperties); // Retorna Node diretamente
-                            // case 7: ...
+                            case 6:
+                            case 7:
+                                return createSwapSuggestionsUI(loadedProperties, exerciseNumber); // Retorna Node diretamente
+
                         }
                         return scrollPane; // Retorna ScrollPane para os casos antigos
                     }
@@ -218,7 +219,7 @@ public class ApplicationViewer extends Application {
     }
 
 
-    private Node createSwapSuggestionsUI(List<Propriedade> allProperties) {
+    private Node createSwapSuggestionsUI(List<Propriedade> allProperties, int exerciseNumber) {
         VBox container = new VBox(10);
         container.setPadding(new Insets(15));
         container.setAlignment(Pos.CENTER);
@@ -229,7 +230,7 @@ public class ApplicationViewer extends Application {
         ListView<String> suggestionsListView = new ListView<>();
 
         // Obter sugestões (isto pode demorar, idealmente seria feito em background, mas já está no Task)
-        List<SwapSuggestion> suggestions = PropertySwapSuggester.generateSuggestions(allProperties);
+        List<SwapSuggestion> suggestions = PropertySwapSuggester.generateSuggestions(allProperties, exerciseNumber);
 
         if (suggestions.isEmpty()) {
             suggestionsListView.getItems().add("Nenhuma sugestão de troca benéfica encontrada.");

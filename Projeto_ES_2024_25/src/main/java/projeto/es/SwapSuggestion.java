@@ -44,14 +44,14 @@ public class SwapSuggestion {
     @Override
     public String toString() {
         return String.format(
-                "Trocar Propriedade %d (%.2fm², Owner %d) com Propriedade %d (%.2fm², Owner %d)\n" +
-                        "  Owner %d: Área Média Inicial: %.2fm² -> Final: %.2fm²\n" +
-                        "  Owner %d: Área Média Inicial: %.2fm² -> Final: %.2fm²\n" +
-                        "  Score Potencial: %.2f%%",
-                prop1.getObjectId(), prop1.getShape_area(), owner1Id,
-                prop2.getObjectId(), prop2.getShape_area(), owner2Id,
-                owner1Id, owner1InitialAvgArea, owner1FinalAvgArea,
-                owner2Id, owner2InitialAvgArea, owner2FinalAvgArea,
+                "Trocar Propriedade %d (%.2fm², Owner %d, %s) com Propriedade %d (%.2fm², Owner %d, %s)\n" +
+                        "  Owner %d: Área Média Inicial: %.2fm² -> Final: %.2fm²        +%.2fm² (+%.2f%%)\n" +
+                        "  Owner %d: Área Média Inicial: %.2fm² -> Final: %.2fm²        +%.2fm² (+%.2f%%)\n" +
+                        "  Score Potencial: %.2f%%" ,
+                prop1.getObjectId(), prop1.getShape_area(), owner1Id, prop1.getFreguesia(),
+                prop2.getObjectId(), prop2.getShape_area(), owner2Id, prop2.getFreguesia(),
+                owner1Id, owner1InitialAvgArea, owner1FinalAvgArea,(owner1FinalAvgArea- owner1InitialAvgArea),(owner1FinalAvgArea * 100 / owner1InitialAvgArea) -100,
+                owner2Id, owner2InitialAvgArea, owner2FinalAvgArea,(owner2FinalAvgArea- owner2InitialAvgArea),(owner2FinalAvgArea * 100 / owner2InitialAvgArea) -100,
                  potentialScore
         );
     }
