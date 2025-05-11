@@ -38,6 +38,27 @@ public class Calculations {
                 .map(ArrayList::new)
                 .collect(Collectors.toList());
     }
+
+    public static List<List<Integer>> encontrarVizinhosPoroprietarios(List<Propriedade> propriedades) {
+        Set<Set<Integer>> paresUnicos = new HashSet<>();
+
+        propriedades.forEach(propriedade -> {
+            int id = propriedade.getOwner();
+            Geometry geometria = propriedade.getGeometry();
+
+            propriedades.forEach(p -> {
+                if (id != p.getOwner() && geometria.touches(p.getGeometry())) {
+                    paresUnicos.add(new HashSet<>(Arrays.asList(id, p.getOwner())));
+                }
+            });
+        });
+
+        // Converter para List<List<Integer>>
+        return paresUnicos.stream()
+                .map(ArrayList::new)
+                .collect(Collectors.toList());
+    }
+
     /**
      * Agrupa propriedades adjacentes do mesmo proprietário
      * @param propriedades Lista de propriedades

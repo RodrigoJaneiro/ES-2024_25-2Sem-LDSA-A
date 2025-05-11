@@ -4,12 +4,9 @@ import javafx.application.Application;
 import javafx.concurrent.Task;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.ProgressIndicator;
-import javafx.scene.control.ScrollPane;
+import javafx.scene.control.*; // Import genérico para ListView
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -20,10 +17,21 @@ import java.util.stream.Collectors;
 
 public class ApplicationViewer extends Application {
     private Stage primaryStage;
+    private List<Propriedade> loadedProperties; // Cache das propriedades carregadas
 
     @Override
     public void start(Stage primaryStage) throws Exception {
         this.primaryStage = primaryStage;
+        // Carregar dados uma vez para evitar recarregamentos
+        try {
+            this.loadedProperties = CSVLoader.LoadPropriedades("Madeira"); // ou o nome do arquivo que você usa
+        } catch (Exception e) {
+            // Lidar com erro de carregamento inicial, talvez mostrar um alerta e sair
+            System.err.println("Falha ao carregar dados iniciais: " + e.getMessage());
+            e.printStackTrace();
+            // Mostrar um alerta para o usuário seria bom aqui
+            return;
+        }
         showMainMenu();
     }
 
@@ -33,7 +41,7 @@ public class ApplicationViewer extends Application {
         grid.setHgap(20);
         grid.setVgap(20);
 
-        for (int i = 2; i <= 7; i++) {
+        for (int i = 2; i <= 7; i++) { // Supondo que o Ex6 é o botão "Ex6"
             Button btn = new Button("Ex" + i);
             btn.setMinWidth(100);
             btn.setMinHeight(100);
@@ -47,33 +55,47 @@ public class ApplicationViewer extends Application {
                 ProgressIndicator progress = new ProgressIndicator();
                 contentPane.getChildren().add(progress);
 
-                Scene scene = new Scene(contentPane, 800, 600);
+                Scene scene = new Scene(contentPane, 800, 600); // Aumentar tamanho para sugestões
                 exerciseStage.setScene(scene);
                 exerciseStage.show();
 
-                Task<ScrollPane> task = new Task<ScrollPane>() {
+                Task<Node> task = new Task<Node>() { // Alterado para Node para flexibilidade
                     @Override
-                    protected ScrollPane call() throws Exception {
-                        GraphViewer graphViewer = new GraphViewer(CSVLoader.LoadPropriedades("Madeira"));
+                    protected Node call() throws Exception {
+                        // Usar as propriedades já carregadas
+                        if (loadedProperties == null || loadedProperties.isEmpty()) {
+                            throw new IllegalStateException("Dados de propriedades não carregados.");
+                        }
+                        GraphViewer graphViewer = new GraphViewer(loadedProperties);
                         ScrollPane scrollPane = new ScrollPane();
-
-                        if (exerciseNumber == 2) {
-                            scrollPane.setContent(graphViewer.drawGraphVizinhos());
-                        }
-                        else if (exerciseNumber == 4 || exerciseNumber == 5) {
-                            scrollPane.setContent(createAreaCalculationUI(graphViewer, exerciseNumber == 5));
-                        }
-
                         scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
                         scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
-                        return scrollPane;
+
+                        switch (exerciseNumber) {
+                            case 2:
+                                scrollPane.setContent(graphViewer.drawGraphVizinhos());
+                                break;
+                            case 3:
+                                scrollPane.setContent(graphViewer.drawGraphVizinhosPropreietarios());
+                                break;
+                            case 4:
+                            case 5:
+                                scrollPane.setContent(createAreaCalculationUI(graphViewer, exerciseNumber == 5));
+                                break;
+                            case 6: // Novo caso para o exercício 6
+                                return createSwapSuggestionsUI(loadedProperties); // Retorna Node diretamente
+                            // case 7: ...
+                        }
+                        return scrollPane; // Retorna ScrollPane para os casos antigos
                     }
                 };
 
                 task.setOnSucceeded(event -> contentPane.getChildren().setAll(task.getValue()));
-                task.setOnFailed(event -> contentPane.getChildren().setAll(
-                        new Label("Erro: " + task.getException().getMessage())));
-
+                task.setOnFailed(event -> {
+                    task.getException().printStackTrace(); // Bom para debugging
+                    contentPane.getChildren().setAll(
+                            new Label("Erro ao processar Exercício " + exerciseNumber + ": " + task.getException().getMessage()));
+                });
                 new Thread(task).start();
             });
             grid.add(btn, (i - 2) % 3, (i - 2) / 3);
@@ -86,6 +108,7 @@ public class ApplicationViewer extends Application {
     }
 
     private VBox createAreaCalculationUI(GraphViewer graphViewer, boolean groupAdjacent) {
+        // ... (seu código existente, sem alterações necessárias aqui)
         VBox vbox = new VBox(10);
         vbox.setAlignment(Pos.CENTER);
         vbox.setPadding(new Insets(20));
@@ -97,7 +120,8 @@ public class ApplicationViewer extends Application {
         ComboBox<String> nomeAreaCombo = new ComboBox<>();
         nomeAreaCombo.setPromptText("Selecione a área");
 
-        tipoAreaCombo.setOnAction(event -> updateAreaCombo(tipoAreaCombo.getValue(), nomeAreaCombo, graphViewer));
+        // Usar as propriedades carregadas para popular os combos
+        tipoAreaCombo.setOnAction(event -> updateAreaCombo(tipoAreaCombo.getValue(), nomeAreaCombo, this.loadedProperties));
 
         Button calcularBtn = new Button(groupAdjacent ?
                 "Calcular Área Média (Agrupando Adjacentes)" : "Calcular Área Média");
@@ -106,7 +130,7 @@ public class ApplicationViewer extends Application {
         calcularBtn.setOnAction(event -> calculateArea(
                 tipoAreaCombo.getValue(),
                 nomeAreaCombo.getValue(),
-                graphViewer,
+                this.loadedProperties, // Passar a lista de propriedades
                 resultadoLabel,
                 groupAdjacent
         ));
@@ -118,15 +142,15 @@ public class ApplicationViewer extends Application {
                 calcularBtn,
                 resultadoLabel
         );
-
         return vbox;
     }
 
-    private void updateAreaCombo(String tipoSelecionado, ComboBox<String> nomeAreaCombo, GraphViewer graphViewer) {
+    // Modificar updateAreaCombo e calculateArea para aceitar List<Propriedade> diretamente
+    private void updateAreaCombo(String tipoSelecionado, ComboBox<String> nomeAreaCombo, List<Propriedade> propriedades) {
         nomeAreaCombo.getItems().clear();
         if (tipoSelecionado != null) {
             nomeAreaCombo.getItems().addAll(
-                    graphViewer.getPropriedades().stream()
+                    propriedades.stream() // Usar a lista de propriedades fornecida
                             .map(prop -> {
                                 switch (tipoSelecionado) {
                                     case "Freguesia": return prop.getFreguesia();
@@ -136,13 +160,13 @@ public class ApplicationViewer extends Application {
                                 }
                             })
                             .distinct()
-                            .filter(s -> !s.isEmpty())
+                            .filter(s -> s != null && !s.isEmpty())
                             .collect(Collectors.toList())
             );
         }
     }
 
-    private void calculateArea(String tipoArea, String nomeArea, GraphViewer graphViewer,
+    private void calculateArea(String tipoArea, String nomeArea, List<Propriedade> todasPropriedades,
                                Label resultadoLabel, boolean groupAdjacent) {
         try {
             if (tipoArea == null || nomeArea == null) {
@@ -150,32 +174,31 @@ public class ApplicationViewer extends Application {
                 return;
             }
 
+            List<Propriedade> propriedadesFiltradasPorAreaGeo = todasPropriedades.stream()
+                    .filter(prop -> AreaCalculator.filtraPorArea(prop, tipoArea, nomeArea))
+                    .collect(Collectors.toList());
+
+            if (propriedadesFiltradasPorAreaGeo.isEmpty()) {
+                resultadoLabel.setText("Nenhuma propriedade encontrada para a área especificada.");
+                return;
+            }
+
             double areaMedia;
-            int originalCount, processedCount;
+            int originalCount = propriedadesFiltradasPorAreaGeo.size();
+            int processedCount;
 
             if (groupAdjacent) {
-                List<Propriedade> agrupadas = Calculations.agruparPropriedadesAdjacentes(
-                        graphViewer.getPropriedades().stream()
-                                .filter(prop -> AreaCalculator.filtraPorArea(prop, tipoArea, nomeArea))
-                                .collect(Collectors.toList())
-                );
-                originalCount = (int) graphViewer.getPropriedades().stream()
-                        .filter(prop -> AreaCalculator.filtraPorArea(prop, tipoArea, nomeArea))
-                        .count();
+                List<Propriedade> agrupadas = Calculations.agruparPropriedadesAdjacentes(propriedadesFiltradasPorAreaGeo);
                 processedCount = agrupadas.size();
                 areaMedia = agrupadas.stream()
                         .mapToDouble(Propriedade::getShape_area)
                         .average()
                         .orElse(0);
             } else {
-                areaMedia = AreaCalculator.calcularAreaMedia(
-                        graphViewer.getPropriedades(),
-                        tipoArea,
-                        nomeArea
-                );
-                originalCount = (int) graphViewer.getPropriedades().stream()
-                        .filter(prop -> AreaCalculator.filtraPorArea(prop, tipoArea, nomeArea))
-                        .count();
+                areaMedia = propriedadesFiltradasPorAreaGeo.stream()
+                        .mapToDouble(Propriedade::getShape_area)
+                        .average()
+                        .orElse(0);
                 processedCount = originalCount;
             }
 
@@ -186,11 +209,44 @@ public class ApplicationViewer extends Application {
                     tipoArea,
                     areaMedia,
                     originalCount,
-                    groupAdjacent ? " -> " + processedCount + " agrupadas" : ""
+                    groupAdjacent && originalCount > 0 ? " -> " + processedCount + " agrupadas" : ""
             ));
         } catch (Exception ex) {
-            resultadoLabel.setText("Erro: " + ex.getMessage());
+            ex.printStackTrace();
+            resultadoLabel.setText("Erro ao calcular área: " + ex.getMessage());
         }
+    }
+
+
+    private Node createSwapSuggestionsUI(List<Propriedade> allProperties) {
+        VBox container = new VBox(10);
+        container.setPadding(new Insets(15));
+        container.setAlignment(Pos.CENTER);
+
+        Label title = new Label("Sugestões de Troca de Propriedades");
+        title.setStyle("-fx-font-size: 16px; -fx-font-weight: bold;");
+
+        ListView<String> suggestionsListView = new ListView<>();
+
+        // Obter sugestões (isto pode demorar, idealmente seria feito em background, mas já está no Task)
+        List<SwapSuggestion> suggestions = PropertySwapSuggester.generateSuggestions(allProperties);
+
+        if (suggestions.isEmpty()) {
+            suggestionsListView.getItems().add("Nenhuma sugestão de troca benéfica encontrada.");
+        } else {
+            for (SwapSuggestion suggestion : suggestions) {
+                suggestionsListView.getItems().add(suggestion.toString());
+            }
+        }
+
+        ScrollPane scrollPane = new ScrollPane(suggestionsListView);
+        scrollPane.setFitToWidth(true);
+        scrollPane.setFitToHeight(true);
+
+        container.getChildren().addAll(title, scrollPane);
+        VBox.setVgrow(scrollPane, javafx.scene.layout.Priority.ALWAYS); // Fazer o scrollPane crescer
+
+        return container;
     }
 
     public static void main(String[] args) {

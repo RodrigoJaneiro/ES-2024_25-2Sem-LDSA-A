@@ -39,6 +39,18 @@ public class Propriedade {
         this.ilha = record.get("Ilha");
     }
 
+    public Propriedade(Propriedade other) {
+        this.objectId = other.objectId;
+        this.par_id = other.par_id;
+        this.shape_length = other.shape_length;
+        this.shape_area = other.shape_area;
+        this.geometry = other.geometry;
+        this.owner = other.owner;
+        this.freguesia = other.freguesia;
+        this.municipio = other.municipio;
+        this.ilha = other.ilha;
+    }
+
     /**
      * Instantiates a new Propriedade.
      */
