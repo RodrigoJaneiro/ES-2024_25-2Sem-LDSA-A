@@ -41,8 +41,9 @@ public class ApplicationViewer extends Application {
         grid.setHgap(20);
         grid.setVgap(20);
 
-        for (int i = 2; i <= 7; i++) { // Supondo que o Ex6 é o botão "Ex6"
-            Button btn = new Button("Ex" + i);
+        for (int i = 2; i <= 7; i++) {
+            String textoBotao = getTextoBotao(i);
+            Button btn = new Button(textoBotao);
             btn.setMinWidth(100);
             btn.setMinHeight(100);
             final int exerciseNumber = i;
@@ -55,7 +56,7 @@ public class ApplicationViewer extends Application {
                 ProgressIndicator progress = new ProgressIndicator();
                 contentPane.getChildren().add(progress);
 
-                Scene scene = new Scene(contentPane, 800, 600); // Aumentar tamanho para sugestões
+                Scene scene = new Scene(contentPane, 800, 600);
                 exerciseStage.setScene(scene);
                 exerciseStage.show();
 
@@ -99,13 +100,38 @@ public class ApplicationViewer extends Application {
                 });
                 new Thread(task).start();
             });
-            grid.add(btn, (i - 2) % 3, (i - 2) / 3);
+            grid.add(btn, (i - 2) % 2, (i - 2) / 2);
         }
 
         Scene scene = new Scene(grid, 600, 400);
         primaryStage.setTitle("Menu Principal");
         primaryStage.setScene(scene);
         primaryStage.show();
+    }
+
+    private String getTextoBotao(int numExercicio) {
+        String textoBotao = "";
+        switch (numExercicio) {
+            case 2:
+                textoBotao = "Grafo Cadastro Propriedades";
+                break;
+            case 3:
+                textoBotao = "Grafo Cadastro Proprietários";
+                break;
+            case 4:
+                textoBotao = "Área Média das Propriedades";
+                break;
+            case 5:
+                textoBotao = "Área Média com Propriedades Adjacentes";
+                break;
+            case 6:
+                textoBotao = "Sugestão de Troca por m2";
+                break;
+            case 7:
+                textoBotao = "Sugestão de Troca por m2 e Diferentes Zonas";
+                break;
+        }
+        return textoBotao + " (Ex" + numExercicio + ")";
     }
 
     private VBox createAreaCalculationUI(GraphViewer graphViewer, boolean groupAdjacent) {
