@@ -57,6 +57,19 @@ public class Propriedade {
     public Propriedade() {
     }
 
+    public Propriedade(int objectId, float par_id, double shape_length, double shape_area, Geometry geometry, int owner, String freguesia, String municipio, String ilha) {
+        this.objectId = objectId;
+        this.par_id = par_id;
+        this.shape_length = shape_length;
+        this.shape_area = shape_area;
+        this.geometry = geometry;
+        this.owner = owner;
+        this.freguesia = freguesia;
+        this.municipio = municipio;
+        this.ilha = ilha;
+    }
+
+
     /**
      * Gets object id.
      *

@@ -47,6 +47,21 @@ public class PropriedadeTest {
         assertEquals("FreguesiaTeste", propriedade.getFreguesia());
         assertEquals("MunicipioTeste", propriedade.getMunicipio());
         assertEquals("IlhaTeste", propriedade.getIlha());
+
+
+        // Cria uma instância de Propriedade por outra
+        Propriedade propriedade2 = new Propriedade(propriedade);
+
+        // Verifica se os valores foram atribuídos corretamente
+        assertEquals(1, propriedade2.getObjectId());
+        assertEquals(123.45f, propriedade2.getPar_id(), 0.001);
+        assertEquals(100.50, propriedade2.getShape_length(), 0.001);
+        assertEquals(500.25, propriedade2.getShape_area(), 0.001);
+        assertSame(testGeometry, propriedade2.getGeometry());
+        assertEquals(5, propriedade2.getOwner());
+        assertEquals("FreguesiaTeste", propriedade2.getFreguesia());
+        assertEquals("MunicipioTeste", propriedade2.getMunicipio());
+        assertEquals("IlhaTeste", propriedade2.getIlha());
     }
 
     /**
