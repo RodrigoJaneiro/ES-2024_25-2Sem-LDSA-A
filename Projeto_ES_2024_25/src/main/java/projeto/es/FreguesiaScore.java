@@ -63,6 +63,10 @@ public class FreguesiaScore {
           freguesias.put("Paul do Mar", 2);
           freguesias.put("Sao João", 2);
 
-          return freguesias.get(freguesia);
+          try{
+               return freguesias.get(freguesia);
+          } catch (NullPointerException e) {
+               return 0;
+          }
      }
 }

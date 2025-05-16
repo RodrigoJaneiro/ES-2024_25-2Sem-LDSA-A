@@ -17,6 +17,10 @@ public class MunicipiosScore {
           municipios.put("São Vicente", 2);
           municipios.put("Santana", 1);
 
-          return municipios.get(municipio);
+          try{
+               return municipios.get(municipio);
+          } catch (NullPointerException e) {
+               return 0;
+          }
      }
 }
