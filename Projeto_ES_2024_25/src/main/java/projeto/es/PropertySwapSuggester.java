@@ -33,7 +33,7 @@ public class PropertySwapSuggester {
                 .orElse(0.0);
     }
 
-    public static List<SwapSuggestion> generateSuggestions(List<Propriedade> allOriginalProperties) {
+    public static List<SwapSuggestion> generateSuggestions(List<Propriedade> allOriginalProperties, int exerciseNumber) {
         List<SwapSuggestion> suggestions = new ArrayList<>();
 
         List<Propriedade> allPropsCopyForSimulation = allOriginalProperties.stream()
@@ -83,7 +83,14 @@ public class PropertySwapSuggester {
 
                             double avgAreaOfPair = (p1Original.getShape_area() + p2Original.getShape_area()) / 2.0;
                             double normalizedAreaDiff = (avgAreaOfPair > 0.01) ? areaDiff / avgAreaOfPair : areaDiff; // Evitar div por zero
-                            double potentialScore = 1.0 / (1.0 + normalizedAreaDiff) * 100; // Quanto menor a diff, mais perto de 1
+                            double potentialScore = 1.0 / (1.0 + normalizedAreaDiff) * 100;
+
+                            switch (exerciseNumber){
+                                case 7:
+                                    potentialScore -= Math.pow(Math.abs(FreguesiaScore.getScore(p1Original.getFreguesia()) - FreguesiaScore.getScore(p2Original.getFreguesia())),1.5);
+                                    potentialScore -= Math.pow(Math.abs(MunicipiosScore.getScore(p1Original.getMunicipio()) - MunicipiosScore.getScore(p2Original.getMunicipio())),1.5);
+                                    break;
+                            }
 
                             suggestions.add(new SwapSuggestion(
                                     p1Original, p2Original, owner1Id, owner2Id,
@@ -101,6 +108,6 @@ public class PropertySwapSuggester {
         suggestions.sort(Comparator.comparingDouble(SwapSuggestion::getPotentialScore).reversed());
 
         // Retornar, por exemplo, as top 10 ou todas se forem poucas
-        return suggestions.stream().limit(20).collect(Collectors.toList()); // Limitar para não sobrecarregar a UI
+        return suggestions.stream().limit(100).collect(Collectors.toList()); // Limitar para não sobrecarregar a UI
     }
 }

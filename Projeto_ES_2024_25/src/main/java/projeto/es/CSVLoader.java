@@ -24,7 +24,7 @@ public class CSVLoader {
      * @throws ParseException the parse exception
      */
     public static List<Propriedade> LoadPropriedades(String nomeFicheiroCsv) throws IOException, ParseException {
-        final int MAX_LINHAS = 500;
+        final int MAX_LINHAS = 1250;
         int i = 0;
 
         String caminhoCsv;
