@@ -6,7 +6,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.*; // Import genérico para ListView
+import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 
 public class ApplicationViewer extends Application {
     private Stage primaryStage;
-    private List<Propriedade> loadedProperties; // Cache das propriedades carregadas
+    private List<Propriedade> loadedProperties;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
