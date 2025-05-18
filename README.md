@@ -12,3 +12,6 @@
 2. Execute o instalador
 3. **Importante:** Marque a opção "Add Graphviz to PATH"
 4. Reinicie seu terminal/IDE após instalação
+
+## Vídeo do Projeto 
+https://youtu.be/XiUokSGUo28
